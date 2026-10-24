@@ -1,7 +1,11 @@
 FROM node:22.23.4-bookworm
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libbrotli1 && \
+    dpkg --compare-versions "$(dpkg-query -W -f='${Version}' libbrotli1)" ge 1.0.9-2+deb12u1 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Bun (required for build scripts)
-RUN curl -fsSL https://bun.sh/install | bash
+RUN curl -fsSL https://bun.sh/install | bash -s -- bun-v1.4.4
 ENV PATH="/root/.bun/bin:${PATH}"
 
 RUN corepack enable
